@@ -1,0 +1,23 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+build/
+dist/
+*.spec
+
+# App data
+*.log
+.uad/
+
+# Brand generator intermediates
+assets/logo_raw.png
+assets/logo.html
+
+# IDE / OS
+.vscode/
+.idea/
+Thumbs.db
+desktop.ini

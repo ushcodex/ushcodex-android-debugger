@@ -1,0 +1,3 @@
+# USHCODEX Android Debugger — runtime dependencies
+# Tkinter ships with the standard CPython installer on Windows.
+Pillow>=10.0

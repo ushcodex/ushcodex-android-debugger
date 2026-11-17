@@ -6,8 +6,8 @@
 
 **A powerful, open-source Android device control and debugging suite.**
 
-Mirror, control, and debug your Android device from your PC — with every control at the click of a button.
-Native Tkinter GUI (no Electron), powered by **ADB** and **scrcpy**.
+Mirrors, controls and debugs Android devices from your PC — the scrcpy screen is **embedded right inside the app** with a collapsible control sidebar.
+Native Tkinter GUI (no Electron), warm light theme matching [ushcodex.tech](https://ushcodex.tech), powered by **ADB** and **scrcpy**.
 
 ![Python](https://img.shields.io/badge/Python-3.9%2B-blue?logo=python&logoColor=white)
 ![License](https://img.shields.io/badge/License-MIT-green.svg)
@@ -20,10 +20,13 @@ Native Tkinter GUI (no Electron), powered by **ADB** and **scrcpy**.
 
 ## ✨ Features
 
-### 🖥 Mirror & Launch
+### 🖥 Embedded Mirror + Collapsible Sidebar
+The scrcpy screen is **embedded inside the app** — not a floating window. All controls live in a
+**collapsible sidebar** beside it: out of the way of the screen, one click away.
+
 | Mode | Description |
 |---|---|
-| **Mirror Screen** | Full screen mirroring on your PC (scrcpy) |
+| **Mirror Screen** | Full screen mirroring, embedded in the UAD window |
 | **Mirror (Screen Off)** | Mirror while the phone display stays off |
 | **OTG Mode** | Use your PC keyboard/mouse as a USB HID device — even on locked screens |
 | **Camera Source** | Mirror the phone camera instead of the display |
@@ -32,17 +35,13 @@ Native Tkinter GUI (no Electron), powered by **ADB** and **scrcpy**.
 
 Full control over **codec (H.264/H.265/AV1), bitrate, FPS, resolution, audio codec, mouse mode (SDK/UHID/AOAM), orientation, window geometry**, and more — all from the Settings tab, no CLI flags required.
 
-### 🎛 Quick Device Controls
-Every input control at your fingertips: **Back, Home, Recents, Menu, Power/Lock, Volume ±/Mute, Screen On/Off, Rotation lock (portrait/landscape), Brightness ±, Notification bar, Quick Settings, Media transport (Play/Pause/Prev/Next/Stop), Clipboard push, Type-on-phone, Kill foreground app, Screenshot, Reboot (normal/bootloader/recovery/sideload), Install APK, Push file**.
-
-### 🚀 Advanced Features
-- **⬛ Desktop / Tablet Dual-Pane Mode** — force dual-pane tablet layout via a virtual display density (`wm density 240`), with automatic detection and one-click reset.
-- **👆 Hardware-Level Gesture Automation** — record raw `getevent` streams from any `/dev/input` device and replay them with `sendevent`, plus tap/swipe macro builder. Works even when Android's `input` injection fails.
-- **🔗 Port Forward / Reverse tunneling** — full `adb forward` / `adb reverse` rule manager.
-- **📋 Logcat Viewer** — real-time streamed logcat with level filter (V→E), text filter, case sensitivity, and export.
-- **🐛 Bug Report** — capture a full device bugreport ZIP.
-- **📊 Device Density/Resolution** — read & override `wm density` / `wm size` live.
-- **🚫 PowerGenie killer** — one-click disable of Huawei's aggressive background app manager.
+### 🎛 Stateful Controls (everything can be deactivated)
+- **⬛ Tablet Mode** — force dual-pane layout via virtual density (240 dpi); click again to restore your default DPI
+- **⟲ Force Landscape** — locks the device orientation; click again to restore auto-rotate
+- **🖥 Rotate PC View** — rotates the mirrored view on the PC side, bypassing app orientation locks (Huawei Home, the Phone app, etc.)
+- **⌨ Suppress Keyboard** — stops the on-screen IME from popping up and covering the mirror
+- **👆 Gesture Automation** — record raw `getevent` streams and replay via `sendevent`
+- **🔗 Port Forward / Reverse**, **📋 Logcat**, **🐛 Bug Report**, **📊 Density/DPI** (with explicit Reset), **🚫 PowerGenie killer**
 
 ### 📁 Files & Shell
 - **File manager** — browse the device filesystem, push/pull, rename, delete, mkdir.
@@ -83,7 +82,8 @@ ushcodex-android-debugger/
 ├── uad/
 │   ├── adb_manager.py       # Thread-safe ADB wrapper (all operations)
 │   ├── device_panel.py      # Device list, WiFi connect, device info
-│   ├── mirror_panel.py      # All scrcpy launch modes + quick controls
+│   ├── mirror_panel.py      # Embedded mirror + collapsible control sidebar
+│   ├── mirror_host.py       # Embeds the scrcpy window (Win32 SetParent)
 │   ├── scrcpy_launcher.py   # Builds scrcpy/gnirehtet subprocesses
 │   ├── gesture_dialog.py    # getevent recorder / sendevent replayer
 │   ├── file_manager.py      # Device file browser

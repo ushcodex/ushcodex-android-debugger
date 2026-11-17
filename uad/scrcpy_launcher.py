@@ -92,6 +92,11 @@ class ScrcpyLauncher:
     def pid(self) -> Optional[int]:
         return self._session.pid()
 
+    def launch_args(self, args: list[str], on_exit: Callable = None,
+                    on_output: Callable = None) -> None:
+        """Launch scrcpy with a raw argument list (used by MirrorHost embed)."""
+        self._session.launch(args, on_exit, on_output)
+
     # ── Argument builders ─────────────────────────────────────────────────────
 
     def _base_args(self, cfg: dict, serial: Optional[str] = None) -> list[str]:
@@ -175,10 +180,15 @@ class ScrcpyLauncher:
             if orient in map_:
                 args += ["--lock-video-orientation", map_[orient]]
 
-        # Rotation
+        # Rotation (video/window orientation on the PC side)
         rotation = cfg.get("rotation")
         if rotation:
             args += ["--rotation", str(rotation)]
+
+        # PC-side rotation of the mirrored view (bypasses app orientation locks)
+        pc_rot = int(cfg.get("pc_rotation", 0) or 0)
+        if pc_rot in (90, 180, 270):
+            args += ["--orientation", str(pc_rot)]
 
         return args
 

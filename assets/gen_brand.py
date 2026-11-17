@@ -21,7 +21,7 @@ ICO    = ASSETS / "icons" / "uad.ico"
 
 ORANGE = (247, 147, 30)
 PURPLE = (71, 42, 190)
-DARK   = (15, 15, 26)
+DARK   = (247, 246, 242)   # banner background = paper (#f7f6f2), matches light UI
 
 
 def lerp(c1, c2, t):
@@ -43,7 +43,7 @@ def rasterize_svg(svg_path: Path, out_png: Path, width: int = 1600) -> bool:
     h = int(width * 9.56 / 29.09) + 8
     html = out_png.with_suffix(".html")
     html.write_text(
-        f'<html><body style="margin:0;background:#0f0f1a;">'
+        f'<html><body style="margin:0;background:#f7f6f2;">'
         f'<img src="{svg_path.as_uri()}" width="{width}"></body></html>',
         encoding="utf-8")
     try:

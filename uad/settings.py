@@ -42,6 +42,8 @@ DEFAULTS = {
     "disable_screensaver": False,
     "clipboard_autosync":  True,
     "power_off_on_close":  False,
+    "suppress_ime":        True,     # stop the on-screen keyboard covering the mirror
+    "pc_rotation":         0,        # 0 / 90 / 180 / 270 — PC-side view rotation
 
     # ADB
     "adb_path":            r"C:\Users\PC\Projects\Scrcpy\adb.exe",
@@ -103,6 +105,6 @@ class Settings:
             "gamepad", "borderless", "always_on_top", "fullscreen",
             "window_x", "window_y", "window_w", "window_h",
             "stay_awake", "show_touches", "disable_screensaver",
-            "clipboard_autosync", "power_off_on_close",
+            "clipboard_autosync", "power_off_on_close", "pc_rotation",
         ]
         return {k: self._data.get(k, DEFAULTS.get(k)) for k in keys}

@@ -10,9 +10,17 @@
 ═══════════════════════════════════════════════════════════════════════════════
 """
 import sys
+import os
 import tkinter as tk
 from tkinter import ttk, messagebox
 from pathlib import Path
+
+# Per-monitor DPI awareness BEFORE Tk starts (fixes Win32 child-window scaling)
+try:
+    import ctypes
+    ctypes.windll.shcore.SetProcessDpiAwareness(2)
+except Exception:
+    pass
 
 ROOT = Path(__file__).parent
 if str(ROOT) not in sys.path:
@@ -49,7 +57,7 @@ class UADApp(tk.Tk):
         self.title(APP_NAME)
         self.geometry("1180x760")
         self.minsize(960, 620)
-        self.configure(bg=BRAND["bg"])
+        self.configure(bg=BRAND["paper"])
 
         # ── Settings & backend objects ────────────────────────────────────────
         self.settings = Settings()
@@ -73,6 +81,10 @@ class UADApp(tk.Tk):
         self._build_statusbar()
 
         self.protocol("WM_DELETE_WINDOW", self._on_close)
+
+        # Debug/testing hook: UAD_AUTOSTART=1 starts the mirror automatically
+        if os.environ.get("UAD_AUTOSTART") == "1":
+            self.after(1200, self.mirror_panel._mirror)
 
     # ── Paths ─────────────────────────────────────────────────────────────────
 

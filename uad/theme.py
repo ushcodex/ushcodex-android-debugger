@@ -1,42 +1,53 @@
 """
-USHCODEX Android Debugger - Theme & Color System
-USHCODEX branding: Orange #f7931e → Purple #472abe gradient
+USHCODEX Android Debugger - Theme & Design System
+Matches ushcodex.tech: warm paper background, white cards, ink text,
+purple hover accents, orange highlights, hairline borders, soft radii.
 """
 import tkinter as tk
 from tkinter import ttk
 
-# ── Brand Colours ──────────────────────────────────────────────────────────────
+# ── Brand palette (ushcodex.tech design tokens) ──────────────────────────────
 BRAND = {
-    "orange":       "#f7931e",
-    "purple":       "#472abe",
-    "mid":          "#a56267",   # midpoint of gradient
-    "bg":           "#0f0f1a",   # near-black background
-    "bg2":          "#171727",   # slightly lighter panel bg
-    "bg3":          "#1e1e30",   # card/frame bg
-    "fg":           "#e8e8f0",   # primary text
-    "fg2":          "#a0a0b8",   # secondary text
-    "accent":       "#f7931e",   # accent == orange
-    "accent2":      "#7b3fce",   # second accent (violet)
-    "success":      "#3ddc84",   # green – connected
-    "warning":      "#ffb347",   # amber – warning
-    "danger":       "#ff4f5e",   # red – disconnect / error
-    "border":       "#2a2a3e",   # subtle border
-    "highlight":    "#2e2e45",   # hover highlight
-    "sel":          "#3a2a5a",   # selection colour
-    "btn_primary":  "#f7931e",
-    "btn_hover":    "#e8820f",
-    "btn_danger":   "#ff4f5e",
-    "btn_success":  "#3ddc84",
-    "btn_neutral":  "#2a2a3e",
+    "paper":        "#f7f6f2",   # app background
+    "white":        "#ffffff",   # cards
+    "ink":          "#1b1a20",   # primary text / primary buttons
+    "muted":        "#5d5a62",   # secondary text
+    "line":         "#dfddd8",   # hairline borders
+    "line_soft":    "#e8e6e2",   # even softer borders / dividers
+    "purple":       "#5f30aa",   # hover / active accent
+    "purple_light": "#e9e0f8",   # lavender fills (toggles ON, highlights)
+    "purple_soft":  "#ebe5f2",   # decorative fills
+    "orange":       "#ef7738",   # brand pop
+    "orange_soft":  "#ffb98d",   # decorative orange
+    "dark":         "#1e1c23",   # dark sections (header band)
+    "success":      "#2e7d4f",
+    "success_soft": "#e2f0e6",
+    "danger":       "#b3402e",
+    "danger_soft":  "#f8e4df",
+    "hover_fill":   "#f1efe9",   # subtle hover on list rows
+    "sel":          "#e9e0f8",   # selection
 }
 
 FONT_FAMILY = "Segoe UI"
+
+# Backward-compat aliases (older modules use the dark-theme key names)
+BRAND.update({
+    "bg":     BRAND["paper"],     # was dark bg
+    "bg2":    BRAND["white"],     # was panel bg
+    "bg3":    BRAND["white"],     # was card bg
+    "fg":     BRAND["ink"],
+    "fg2":    BRAND["muted"],
+    "accent": BRAND["purple"],
+    "border": BRAND["line"],
+    "mid":    BRAND["orange_soft"],
+})
 FONTS = {
-    "h1":     (FONT_FAMILY, 18, "bold"),
+    "h1":     (FONT_FAMILY, 20, "bold"),
     "h2":     (FONT_FAMILY, 14, "bold"),
-    "h3":     (FONT_FAMILY, 11, "bold"),
+    "h3":     (FONT_FAMILY, 10, "bold"),
     "body":   (FONT_FAMILY, 10),
     "small":  (FONT_FAMILY,  9),
+    "tiny":   (FONT_FAMILY,  8),
     "mono":   ("Consolas",  10),
     "mono_sm":("Consolas",   9),
     "logo":   (FONT_FAMILY, 13, "bold"),
@@ -45,196 +56,239 @@ FONTS = {
 
 
 def apply_theme(root: tk.Tk) -> None:
-    """Apply dark USHCODEX theme to the whole Tkinter root."""
-    root.configure(bg=BRAND["bg"])
+    """Apply the Ushcodex paper theme to the whole Tkinter root."""
+    root.configure(bg=BRAND["paper"])
 
     style = ttk.Style(root)
     style.theme_use("clam")
 
     # ── General ────────────────────────────────────────────────────────────────
     style.configure(".",
-        background=BRAND["bg"],
-        foreground=BRAND["fg"],
-        fieldbackground=BRAND["bg3"],
-        bordercolor=BRAND["border"],
-        darkcolor=BRAND["bg"],
-        lightcolor=BRAND["bg2"],
-        troughcolor=BRAND["bg2"],
+        background=BRAND["paper"],
+        foreground=BRAND["ink"],
+        fieldbackground=BRAND["white"],
+        bordercolor=BRAND["line"],
+        darkcolor=BRAND["paper"],
+        lightcolor=BRAND["white"],
+        troughcolor=BRAND["hover_fill"],
         selectbackground=BRAND["sel"],
-        selectforeground=BRAND["fg"],
+        selectforeground=BRAND["ink"],
         font=FONTS["body"],
     )
 
-    # ── Frame ──────────────────────────────────────────────────────────────────
-    style.configure("TFrame", background=BRAND["bg"])
-    style.configure("Card.TFrame", background=BRAND["bg3"],
-                    relief="flat", borderwidth=1,
-                    bordercolor=BRAND["border"])
-    style.configure("Panel.TFrame", background=BRAND["bg2"])
-    style.configure("Sidebar.TFrame", background=BRAND["bg2"])
+    # ── Frame ─────────────────────────────────────────────────────────────────
+    style.configure("TFrame", background=BRAND["paper"])
+    style.configure("Card.TFrame", background=BRAND["white"])
+    style.configure("Panel.TFrame", background=BRAND["white"])
+    style.configure("Sidebar.TFrame", background=BRAND["white"])
+    style.configure("Host.TFrame", background=BRAND["paper"])
 
     # ── Label ─────────────────────────────────────────────────────────────────
-    style.configure("TLabel", background=BRAND["bg"], foreground=BRAND["fg"])
-    style.configure("Card.TLabel", background=BRAND["bg3"], foreground=BRAND["fg"])
-    style.configure("Panel.TLabel", background=BRAND["bg2"], foreground=BRAND["fg"])
-    style.configure("Title.TLabel", background=BRAND["bg"], foreground=BRAND["fg"],
+    style.configure("TLabel", background=BRAND["paper"], foreground=BRAND["ink"])
+    style.configure("Card.TLabel", background=BRAND["white"], foreground=BRAND["ink"])
+    style.configure("Panel.TLabel", background=BRAND["white"], foreground=BRAND["ink"])
+    style.configure("Title.TLabel", background=BRAND["paper"], foreground=BRAND["ink"],
                     font=FONTS["h2"])
-    style.configure("Sub.TLabel", background=BRAND["bg"], foreground=BRAND["fg2"],
+    style.configure("Sub.TLabel", background=BRAND["paper"], foreground=BRAND["muted"],
                     font=FONTS["small"])
-    style.configure("Success.TLabel", foreground=BRAND["success"], background=BRAND["bg2"])
-    style.configure("Warning.TLabel", foreground=BRAND["warning"], background=BRAND["bg2"])
-    style.configure("Danger.TLabel",  foreground=BRAND["danger"],  background=BRAND["bg2"])
+    style.configure("CardSub.TLabel", background=BRAND["white"], foreground=BRAND["muted"],
+                    font=FONTS["small"])
+    style.configure("PanelSub.TLabel", background=BRAND["white"], foreground=BRAND["muted"],
+                    font=FONTS["small"])
+    style.configure("Eyebrow.TLabel", background=BRAND["paper"], foreground=BRAND["muted"],
+                    font=FONTS["tiny"])
+    style.configure("Success.TLabel", foreground=BRAND["success"], background=BRAND["white"])
+    style.configure("Warning.TLabel", foreground=BRAND["orange"], background=BRAND["white"])
+    style.configure("Danger.TLabel",  foreground=BRAND["danger"],  background=BRAND["white"])
 
     # ── Button ────────────────────────────────────────────────────────────────
+    # Default = outline: white bg, hairline gray border, ink text → purple on hover
     style.configure("TButton",
-        background=BRAND["btn_neutral"],
-        foreground=BRAND["fg"],
-        bordercolor=BRAND["border"],
-        focuscolor=BRAND["accent"],
+        background=BRAND["white"],
+        foreground=BRAND["ink"],
+        bordercolor="#b8b4b1",
+        focuscolor=BRAND["purple"],
         relief="flat",
-        padding=(8, 5),
+        padding=(12, 7),
         font=FONTS["body"],
+        anchor="center",
     )
     style.map("TButton",
-        background=[("active", BRAND["highlight"]), ("pressed", BRAND["sel"])],
-        foreground=[("active", BRAND["fg"])],
-        bordercolor=[("active", BRAND["accent"])],
+        background=[("active", BRAND["paper"]), ("pressed", BRAND["purple_soft"])],
+        foreground=[("active", BRAND["purple"])],
+        bordercolor=[("active", BRAND["purple"]), ("pressed", BRAND["purple"])],
     )
 
+    # Primary = ink (dark) button → purple on hover (site .button)
     style.configure("Primary.TButton",
-        background=BRAND["btn_primary"], foreground="#ffffff",
-        font=FONTS["h3"])
+        background=BRAND["ink"], foreground="#ffffff",
+        bordercolor=BRAND["ink"],
+        font=FONTS["h3"], padding=(14, 8))
     style.map("Primary.TButton",
-        background=[("active", BRAND["btn_hover"]), ("pressed", "#d07010")])
+        background=[("active", BRAND["purple"]), ("pressed", "#4a2387")],
+        bordercolor=[("active", BRAND["purple"])],
+        foreground=[("active", "#ffffff")],
+    )
 
+    # Danger = soft red card button
     style.configure("Danger.TButton",
-        background=BRAND["btn_danger"], foreground="#ffffff")
+        background=BRAND["white"], foreground=BRAND["danger"],
+        bordercolor=BRAND["danger"], font=FONTS["body"])
     style.map("Danger.TButton",
-        background=[("active", "#e03040"), ("pressed", "#c02030")])
+        background=[("active", BRAND["danger"]), ("pressed", "#8f3123")],
+        foreground=[("active", "#ffffff"), ("pressed", "#ffffff")],
+        bordercolor=[("active", BRAND["danger"])],
+    )
 
+    # Success = soft green
     style.configure("Success.TButton",
-        background=BRAND["btn_success"], foreground="#000000")
+        background=BRAND["white"], foreground=BRAND["success"],
+        bordercolor=BRAND["success"], font=FONTS["body"])
     style.map("Success.TButton",
-        background=[("active", "#2ecc70"), ("pressed", "#1db360")])
+        background=[("active", BRAND["success"]), ("pressed", "#256a42")],
+        foreground=[("active", "#ffffff"), ("pressed", "#ffffff")],
+        bordercolor=[("active", BRAND["success"])],
+    )
 
+    # Accent = purple solid
     style.configure("Accent.TButton",
-        background=BRAND["accent2"], foreground="#ffffff")
+        background=BRAND["purple"], foreground="#ffffff",
+        bordercolor=BRAND["purple"], font=FONTS["h3"])
     style.map("Accent.TButton",
-        background=[("active", "#6a30b0"), ("pressed", "#521f90")])
+        background=[("active", "#4a2387"), ("pressed", "#3c1d70")],
+        foreground=[("active", "#ffffff")],
+    )
+
+    # Toggle ON = lavender fill, purple text (state indicator)
+    style.configure("ToggleOn.TButton",
+        background=BRAND["purple_light"], foreground=BRAND["purple"],
+        bordercolor=BRAND["purple"], font=FONTS["body"])
+    style.map("ToggleOn.TButton",
+        background=[("active", "#dfd2f3"), ("pressed", "#d3c2ef")],
+        foreground=[("active", BRAND["purple"])],
+        bordercolor=[("active", BRAND["purple"])],
+    )
 
     # ── Notebook (Tabs) ────────────────────────────────────────────────────────
     style.configure("TNotebook",
-        background=BRAND["bg"], bordercolor=BRAND["border"], tabmargins=[2,4,0,0])
+        background=BRAND["paper"], bordercolor=BRAND["line"],
+        tabmargins=[2, 6, 0, 0])
     style.configure("TNotebook.Tab",
-        background=BRAND["bg2"], foreground=BRAND["fg2"],
-        padding=[14, 7], font=FONTS["tab"],
-        bordercolor=BRAND["border"])
+        background=BRAND["paper"], foreground=BRAND["muted"],
+        padding=[16, 8], font=FONTS["tab"],
+        bordercolor=BRAND["line"])
     style.map("TNotebook.Tab",
-        background=[("selected", BRAND["bg3"]), ("active", BRAND["highlight"])],
-        foreground=[("selected", BRAND["accent"]), ("active", BRAND["fg"])],
+        background=[("selected", BRAND["white"]), ("active", BRAND["hover_fill"])],
+        foreground=[("selected", BRAND["purple"]), ("active", BRAND["ink"])],
         expand=[("selected", [1, 1, 1, 0])],
     )
 
     # ── Entry ─────────────────────────────────────────────────────────────────
     style.configure("TEntry",
-        fieldbackground=BRAND["bg3"], foreground=BRAND["fg"],
-        bordercolor=BRAND["border"], insertcolor=BRAND["accent"],
+        fieldbackground=BRAND["white"], foreground=BRAND["ink"],
+        bordercolor="#aaa6a1", insertcolor=BRAND["ink"],
         relief="flat")
     style.map("TEntry",
-        fieldbackground=[("focus", BRAND["bg2"])],
-        bordercolor=[("focus", BRAND["accent"])],
+        bordercolor=[("focus", BRAND["purple"])],
+        lightcolor=[("focus", BRAND["purple"])],
     )
 
     # ── Combobox ──────────────────────────────────────────────────────────────
     style.configure("TCombobox",
-        fieldbackground=BRAND["bg3"], background=BRAND["bg3"],
-        foreground=BRAND["fg"], arrowcolor=BRAND["accent"],
-        bordercolor=BRAND["border"], selectbackground=BRAND["sel"])
+        fieldbackground=BRAND["white"], background=BRAND["white"],
+        foreground=BRAND["ink"], arrowcolor=BRAND["ink"],
+        bordercolor="#aaa6a1", selectbackground=BRAND["sel"])
     style.map("TCombobox",
-        fieldbackground=[("readonly", BRAND["bg3"])],
-        selectbackground=[("readonly", BRAND["bg3"])],
-        selectforeground=[("readonly", BRAND["fg"])],
+        fieldbackground=[("readonly", BRAND["white"])],
+        selectbackground=[("readonly", BRAND["sel"])],
+        selectforeground=[("readonly", BRAND["ink"])],
+        bordercolor=[("focus", BRAND["purple"])],
     )
+    root.option_add("*TCombobox*Listbox.Background", BRAND["white"])
+    root.option_add("*TCombobox*Listbox.Foreground", BRAND["ink"])
+    root.option_add("*TCombobox*Listbox.selectBackground", BRAND["sel"])
+    root.option_add("*TCombobox*Listbox.selectForeground", BRAND["ink"])
 
     # ── Scrollbar ─────────────────────────────────────────────────────────────
     style.configure("TScrollbar",
-        background=BRAND["bg2"], troughcolor=BRAND["bg"],
-        arrowcolor=BRAND["fg2"], bordercolor=BRAND["border"],
+        background=BRAND["line_soft"], troughcolor=BRAND["paper"],
+        arrowcolor=BRAND["muted"], bordercolor=BRAND["paper"],
         relief="flat")
     style.map("TScrollbar",
-        background=[("active", BRAND["highlight"])],
+        background=[("active", BRAND["line"])],
     )
 
-    # ── Scale ─────────────────────────────────────────────────────────────────
+    # ── Scale / Progress ──────────────────────────────────────────────────────
     style.configure("TScale",
-        background=BRAND["bg"], troughcolor=BRAND["bg3"],
+        background=BRAND["paper"], troughcolor=BRAND["line_soft"],
         sliderlength=18)
-
-    # ── Progressbar ───────────────────────────────────────────────────────────
     style.configure("TProgressbar",
-        background=BRAND["accent"], troughcolor=BRAND["bg3"],
-        bordercolor=BRAND["bg3"])
+        background=BRAND["purple"], troughcolor=BRAND["line_soft"],
+        bordercolor=BRAND["line_soft"])
 
     # ── Treeview ──────────────────────────────────────────────────────────────
     style.configure("Treeview",
-        background=BRAND["bg3"], foreground=BRAND["fg"],
-        fieldbackground=BRAND["bg3"], bordercolor=BRAND["border"],
-        rowheight=24, font=FONTS["body"])
+        background=BRAND["white"], foreground=BRAND["ink"],
+        fieldbackground=BRAND["white"], bordercolor=BRAND["line"],
+        rowheight=26, font=FONTS["body"])
     style.configure("Treeview.Heading",
-        background=BRAND["bg2"], foreground=BRAND["accent"],
-        relief="flat", font=FONTS["h3"])
+        background=BRAND["paper"], foreground=BRAND["muted"],
+        relief="flat", font=FONTS["tiny"])
     style.map("Treeview",
         background=[("selected", BRAND["sel"])],
-        foreground=[("selected", BRAND["fg"])],
+        foreground=[("selected", BRAND["ink"])],
     )
 
-    # ── Checkbutton ───────────────────────────────────────────────────────────
+    # ── Checkbutton / Radiobutton ─────────────────────────────────────────────
     style.configure("TCheckbutton",
-        background=BRAND["bg"], foreground=BRAND["fg"],
-        indicatorcolor=BRAND["bg3"],
-        indicatorrelief="flat",
-    )
+        background=BRAND["paper"], foreground=BRAND["ink"],
+        indicatorcolor=BRAND["white"], indicatorrelief="flat",
+        bordercolor="#aaa6a1")
     style.map("TCheckbutton",
-        indicatorcolor=[("selected", BRAND["accent"])],
-        background=[("active", BRAND["bg"])],
+        indicatorcolor=[("selected", BRAND["purple"])],
+        background=[("active", BRAND["paper"])],
     )
-
-    # ── Radiobutton ───────────────────────────────────────────────────────────
+    style.configure("Card.TCheckbutton",
+        background=BRAND["white"], foreground=BRAND["ink"])
+    style.map("Card.TCheckbutton",
+        indicatorcolor=[("selected", BRAND["purple"])],
+        background=[("active", BRAND["white"])],
+    )
     style.configure("TRadiobutton",
-        background=BRAND["bg"], foreground=BRAND["fg"])
+        background=BRAND["paper"], foreground=BRAND["ink"])
     style.map("TRadiobutton",
-        indicatorcolor=[("selected", BRAND["accent"])],
-        background=[("active", BRAND["bg"])],
+        indicatorcolor=[("selected", BRAND["purple"])],
+        background=[("active", BRAND["paper"])],
     )
 
     # ── Separator ─────────────────────────────────────────────────────────────
-    style.configure("TSeparator", background=BRAND["border"])
+    style.configure("TSeparator", background=BRAND["line"])
 
     # ── Labelframe ────────────────────────────────────────────────────────────
     style.configure("TLabelframe",
-        background=BRAND["bg3"], bordercolor=BRAND["border"],
+        background=BRAND["white"], bordercolor=BRAND["line"],
         relief="flat")
     style.configure("TLabelframe.Label",
-        background=BRAND["bg3"], foreground=BRAND["accent"],
-        font=FONTS["h3"])
+        background=BRAND["white"], foreground=BRAND["purple"],
+        font=FONTS["tiny"])
 
     # ── Spinbox ───────────────────────────────────────────────────────────────
     style.configure("TSpinbox",
-        fieldbackground=BRAND["bg3"], foreground=BRAND["fg"],
-        bordercolor=BRAND["border"], arrowcolor=BRAND["accent"])
+        fieldbackground=BRAND["white"], foreground=BRAND["ink"],
+        bordercolor="#aaa6a1", arrowcolor=BRAND["ink"])
 
     # Patch Tk text/listbox colours globally
-    root.option_add("*Text.Background",          BRAND["bg3"])
-    root.option_add("*Text.Foreground",          BRAND["fg"])
-    root.option_add("*Text.InsertBackground",    BRAND["accent"])
+    root.option_add("*Text.Background",          BRAND["white"])
+    root.option_add("*Text.Foreground",          BRAND["ink"])
+    root.option_add("*Text.InsertBackground",    BRAND["purple"])
     root.option_add("*Text.SelectBackground",    BRAND["sel"])
-    root.option_add("*Text.SelectForeground",    BRAND["fg"])
-    root.option_add("*Listbox.Background",       BRAND["bg3"])
-    root.option_add("*Listbox.Foreground",       BRAND["fg"])
+    root.option_add("*Text.SelectForeground",    BRAND["ink"])
+    root.option_add("*Listbox.Background",       BRAND["white"])
+    root.option_add("*Listbox.Foreground",       BRAND["ink"])
     root.option_add("*Listbox.SelectBackground", BRAND["sel"])
-    root.option_add("*Listbox.SelectForeground", BRAND["fg"])
-    root.option_add("*Menu.Background",          BRAND["bg2"])
-    root.option_add("*Menu.Foreground",          BRAND["fg"])
-    root.option_add("*Menu.ActiveBackground",    BRAND["sel"])
-    root.option_add("*Menu.ActiveForeground",    BRAND["accent"])
+    root.option_add("*Listbox.SelectForeground", BRAND["ink"])
+    root.option_add("*Menu.Background",          BRAND["white"])
+    root.option_add("*Menu.Foreground",          BRAND["ink"])
+    root.option_add("*Menu.ActiveBackground",    BRAND["purple_light"])
+    root.option_add("*Menu.ActiveForeground",    BRAND["purple"])
     root.option_add("*Menu.Relief",              "flat")
